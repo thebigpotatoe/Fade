@@ -156,7 +156,7 @@ class Fade {
 			// Map the brightness value to a PWM value
 			int pwm_value = map(current_brightness, 0, FADE_BRIGHTNESS_RANGE, 0, FADE_PWM_BIT_RANGE);  // Map
 			pwm_value     = (g_callback) ? g_callback(pwm_value) : pwm_value;                          // Gamma
-			pwm_value     = (inverted) ? FADE_PWM_SIZE - pwm_value : pwm_value;                        // Invert
+			pwm_value     = (inverted) ? FADE_PWM_BIT_RANGE - pwm_value : pwm_value;                        // Invert
 			// Serial.printf("pwm_value %d\n", pwm_value);
 
 			// Write to pin
