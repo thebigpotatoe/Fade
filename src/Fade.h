@@ -39,10 +39,12 @@ class Fade {
  public:  // Constructor
 	Fade(uint8_t _pin, bool _inverted = FADE_PIN_NOT_INVERTED) {
 		if (_check_pin_num(_pin)) {
+			// Set up the pin information
 			pin      = _pin;
 			inverted = _inverted;
 			pinMode(_pin, OUTPUT);
 #ifndef FADE_NO_GAMMA_CORRECTION
+			// Setup the inbuilt gamma function
 			g_callback = [](int _value) {
 				return (int)(pow(((float)_value / (float)FADE_PWM_BIT_RANGE), 2.2) * (float)FADE_PWM_BIT_RANGE);  // 250us
 			};
@@ -162,11 +164,11 @@ class Fade {
 			// Map the brightness value to a PWM value
 			int pwm_value = map(current_brightness, 0, FADE_BRIGHTNESS_RANGE, 0, FADE_PWM_BIT_RANGE);  // Map
 			pwm_value     = (g_callback) ? g_callback(pwm_value) : pwm_value;                          // Gamma
-			pwm_value     = (inverted) ? FADE_PWM_BIT_RANGE - pwm_value : pwm_value;                        // Invert
+			pwm_value     = (inverted) ? FADE_PWM_BIT_RANGE - pwm_value : pwm_value;                   // Invert
 			// Serial.printf("pwm_value %d\n", pwm_value);
 
 			// Write to pin
-			analogWrite(pin, pwm_value);  // Write
+			_apply_pwm(pwm_value);  // Write
 		}
 	}
 	void _apply_pwm(uint32_t _pwm_value) {
