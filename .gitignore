@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# Repo Specific 
+.pio
+.vscode
