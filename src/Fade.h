@@ -26,6 +26,12 @@
 // Required Includes
 #include <Arduino.h>
 
+// Platform specific includes
+#if defined(ESP8266)
+#elif defined(ESP32)
+#include <analogWrite.h>
+#endif
+
 class Fade {
  public:  // Typedefs
 	typedef std::function<int(int)> gamma_callback;
@@ -162,6 +168,15 @@ class Fade {
 			// Write to pin
 			analogWrite(pin, pwm_value);  // Write
 		}
+	}
+	void _apply_pwm(uint32_t _pwm_value) {
+#if defined(ESP8266)
+		// ESP8266 analogWrite Implementation
+		analogWrite(pin, _pwm_value);
+#elif defined(ESP32)
+		// ESP32 analogWrite Implementation
+		analogWrite(pin, _pwmValue, 1023);
+#endif
 	}
 
  protected:  // Storage
