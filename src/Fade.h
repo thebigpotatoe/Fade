@@ -42,12 +42,20 @@ class Fade {
 			// Set up the pin information
 			pin      = _pin;
 			inverted = _inverted;
-			pinMode(_pin, OUTPUT);
+
 #ifndef FADE_NO_GAMMA_CORRECTION
 			// Setup the inbuilt gamma function
 			g_callback = [](int _value) {
 				return (int)(pow(((float)_value / (float)FADE_PWM_BIT_RANGE), 2.2) * (float)FADE_PWM_BIT_RANGE);  // 250us
 			};
+#endif
+
+#if defined(ESP8266)
+			// Set pinmode for esp8266
+			pinMode(pin, OUTPUT);
+#elif defined(ESP32)
+			// Set analog write bit size for esp32
+			analogWriteResolution(10);
 #endif
 		}
 	}
